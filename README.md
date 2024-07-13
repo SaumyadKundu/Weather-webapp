@@ -18,6 +18,6 @@ You can try out the Weather App live [here](https://weather-webapp-ecru.vercel.a
 
 ## API Used
 - [OpenWeatherMap API](https://openweathermap.org/api) for fetching weather data.
-- 
+
 ## License
 This project is licensed under the MIT License.
