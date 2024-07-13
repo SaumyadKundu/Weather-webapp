@@ -1,0 +1,5 @@
+<p>Visibility: ${weatherData.visibility} meters</p>
+<p>Min Temperature: ${weatherData.main.temp_min} °C</p>
+<p>Max Temperature: ${weatherData.main.temp_max} °C</p>
+<p>Feels Like: ${weatherData.main.feels_like} °C</p>
+<p>Icon: <img src="http://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png" alt="Weather Icon"></p>`;

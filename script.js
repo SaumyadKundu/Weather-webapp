@@ -1,42 +1,49 @@
-let weather = {
-    "apikey": WEATHER_API_KEY,
-    fetchWeather : function (city) {
-        fetch("https://api.openweathermap.org/data/2.5/weather?q=" 
-        + city 
-        + "&units=metric&appid=" 
-        + this.apikey)
-        .then((Response) => Response.json())
-        .then((data) => this.displayWeather(data));
-    },
+const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5';
+const WEATHER_API_KEY = '2781fdabd3f202fbd904b289dca533a0'; 
 
-    displayWeather: function(data) {
-        const { name } = data;
-        const { icon, description } = data.weather[0];
-        const { temp, humidity } = data.main;
-        const { speed } = data.wind;
-        document.querySelector(".city").innerText = "Weather in " + name;
-        document.querySelector(".icon").src = "https://openweathermap.org/img/wn/" + icon + ".png";
-        document.querySelector(".description").innerText = description;
-        document.querySelector(".temp").innerText = temp + "°C";
-        document.querySelector(".humidity").innerText = "Humidity: " + humidity + "%";
-        document.querySelector(".wind").innerText = "Wind speed: " + speed + " km/h";
-        document.querySelector(".weather").classList.remove("loading");
-        document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x900/?" + name + "')"
-    },
+async function fetchWeatherData(cityName) {
+  const urlWeatherByCity = `${WEATHER_API_URL}/weather?q=${cityName}&appid=${WEATHER_API_KEY}&units=metric`;
 
-    search : function() {
-        this.fetchWeather(document.querySelector(".searchbar").value);
+  try {
+    const response = await fetch(urlWeatherByCity);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-};
+    
+    const weatherData = await response.json();
+    return weatherData;
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    return null;
+  }
+}
 
-document.querySelector(".search button").addEventListener("click", function() {
-    weather.search();
-});
+async function fetchWeather() {
+  const cityInput = document.getElementById('city-input').value;
+  const weatherInfoElement = document.getElementById('weather-info');
 
-document.querySelector(".searchbar").addEventListener("keyup", function(event){
-    if(event.key == "Enter"){
-        weather.search();
+  try {
+    const weatherData = await fetchWeatherData(cityInput);
+    if (weatherData) {
+      weatherInfoElement.innerHTML = `
+        <h2>Weather in ${weatherData.name}</h2>
+        <p>Temperature: ${weatherData.main.temp} °C</p>
+        <p>Pressure: ${weatherData.main.pressure} hPa</p>
+        <p>Humidity: ${weatherData.main.humidity}%</p>
+        <p>Wind Speed: ${weatherData.wind.speed} m/s</p>
+        <p>Wind Direction: ${weatherData.wind.deg}°</p>
+        <p>Cloudiness: ${weatherData.clouds.all}%</p>
+        <p>Sunrise: ${new Date(weatherData.sys.sunrise * 1000).toLocaleTimeString()}</p>
+        <p>Sunset: ${new Date(weatherData.sys.sunset * 1000).toLocaleTimeString()}</p>
+        <p>Weather Condition: ${weatherData.weather[0].main}</p>`;
+        
+    } else {
+      weatherInfoElement.innerHTML = `<p>No weather data available for ${cityInput}</p>`;
     }
-});
+  } catch (error) {
+    console.error('Error:', error);
+    weatherInfoElement.innerHTML = `<p>Error fetching weather data.</p>`;
+  }
+}
 
-weather.fetchWeather("durgapur");
+document.getElementById('fetch-button').addEventListener('click', fetchWeather);
