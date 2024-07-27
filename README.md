@@ -1,4 +1,4 @@
-# Weather App
+# QuickWeather
 
 ## Overview
 **Weather App** is a web application that allows users to fetch and display current weather data for any city worldwide. Utilizing the OpenWeatherMap API, it provides accurate weather information in a user-friendly interface.
