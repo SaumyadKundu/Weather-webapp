@@ -13,7 +13,6 @@ You can try out the Weather App live [here](https://weather-webapp-ecru.vercel.a
 
 ## Technologies Used
 - **HTML**
-- **CSS**
 - **JavaScript**
 
 ## API Used
